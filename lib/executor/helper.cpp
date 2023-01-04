@@ -17,6 +17,7 @@ Expect<AST::InstrView::iterator>
 Executor::enterFunction(Runtime::StackManager &StackMgr,
                         const Runtime::Instance::FunctionInstance &Func,
                         const AST::InstrView::iterator RetIt, bool IsTailCall) {
+  printf("[Debug] Executor::enterFunction\n");
   // RetIt: the return position when the entered function returns.
 
   // Check if the interruption occurs.
@@ -32,6 +33,7 @@ Executor::enterFunction(Runtime::StackManager &StackMgr,
       static_cast<uint32_t>(FuncType.getReturnTypes().size());
 
   if (Func.isHostFunction()) {
+    printf("[Debug] Executor::enterFunction for isHostFunction\n");
     // Host function case: Push args and call function.
     auto &HostFunc = Func.getHostFunc();
 
@@ -94,6 +96,8 @@ Executor::enterFunction(Runtime::StackManager &StackMgr,
     // the popped frame.
     return StackMgr.popFrame();
   } else if (Func.isCompiledFunction()) {
+    printf("[Debug] Executor::enterFunction for isCompiledFunction\n");
+
     // Compiled function case: Execute the function and jump to the
     // continuation.
 
@@ -152,6 +156,7 @@ Executor::enterFunction(Runtime::StackManager &StackMgr,
     // from the popped frame.
     return StackMgr.popFrame();
   } else {
+    printf("[Debug] Executor::enterFunction for Native function\n");
     // Native function case: Jump to the start of the function body.
 
     // Push local variables into the stack.

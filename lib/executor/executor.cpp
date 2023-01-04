@@ -60,6 +60,10 @@ Expect<std::vector<std::pair<ValVariant, ValType>>>
 Executor::invoke(const Runtime::Instance::FunctionInstance &FuncInst,
                  Span<const ValVariant> Params,
                  Span<const ValType> ParamTypes) {
+  printf("[DEBUG] Executor::invoke:\n");
+  printf("[DEBUG]   FuncInst: isWasmFunction=%d\n", FuncInst.isWasmFunction());
+  printf("[DEBUG]   FuncInst: isHostFunction=%d\n", FuncInst.isHostFunction());
+
   // Check parameter and function type.
   const auto &FuncType = FuncInst.getFuncType();
   const auto &PTypes = FuncType.getParamTypes();

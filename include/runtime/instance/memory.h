@@ -146,6 +146,7 @@ public:
 
     // Copy the data.
     if (likely(Length > 0)) {
+      fprintf(stderr, "Hello");
       std::copy(Slice.begin() + Start, Slice.begin() + Start + Length,
                 DataPtr + Offset);
     }
@@ -263,7 +264,8 @@ public:
           assuming(sizeof(T) == 16);
           Value = 0;
           std::memcpy(&Value, &DataPtr[Offset], Length);
-        } else {
+          printf("[DEBUG] loadValue for size == 16): Value=<Unkown>, Offset=%d, Length=%d", Offset, Length);
+          } else {
           uint64_t LoadVal = 0;
           // Integer case. Extends to the result type.
           std::memcpy(&LoadVal, &DataPtr[Offset], Length);
@@ -273,6 +275,7 @@ public:
               LoadVal |= 0xFFULL << (I * 8);
             }
           }
+          printf("[DEBUG] loadValue for size of %lu: LoadVal=%lx, Offset=%d, Length=%d\n", sizeof(T), LoadVal, Offset, Length);
           Value = static_cast<T>(LoadVal);
         }
       }

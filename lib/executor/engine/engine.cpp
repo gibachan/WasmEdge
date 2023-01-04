@@ -19,6 +19,7 @@ Expect<void>
 Executor::runFunction(Runtime::StackManager &StackMgr,
                       const Runtime::Instance::FunctionInstance &Func,
                       Span<const ValVariant> Params) {
+  printf("[DEBUG] Executor::runFunction:\n");
   // Set start time.
   if (Stat && Conf.getStatisticsConfigure().isTimeMeasuring()) {
     Stat->startRecordWasm();
@@ -54,6 +55,7 @@ Executor::runFunction(Runtime::StackManager &StackMgr,
   }
 
   if (Res) {
+    printf("[DEBUG] Executor::runFunction: Execution succeeded.\n");
     spdlog::debug(" Execution succeeded.");
   } else if (Res.error() == ErrCode::Value::Terminated) {
     spdlog::debug(" Terminated.");
@@ -69,6 +71,7 @@ Executor::runFunction(Runtime::StackManager &StackMgr,
   }
 
   if (Res) {
+    printf("[DEBUG] Executor::runFunction: return {}\n");
     return {};
   }
   if (Res.error() == ErrCode::Value::Terminated) {
@@ -80,6 +83,8 @@ Executor::runFunction(Runtime::StackManager &StackMgr,
 Expect<void> Executor::execute(Runtime::StackManager &StackMgr,
                                const AST::InstrView::iterator Start,
                                const AST::InstrView::iterator End) {
+
+  printf("[Debug] Executor::execute\n");
   AST::InstrView::iterator PC = Start;
   AST::InstrView::iterator PCEnd = End;
 
@@ -217,6 +222,7 @@ Expect<void> Executor::execute(Runtime::StackManager &StackMgr,
 
     // Memory Instructions
     case OpCode::I32__load:
+      printf("[Debug] OpCode::I32__load: targetIndex=%d\n", Instr.getTargetIndex());
       return runLoadOp<uint32_t>(
           StackMgr, *getMemInstByIdx(StackMgr, Instr.getTargetIndex()), Instr);
     case OpCode::I64__load:

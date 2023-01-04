@@ -13,6 +13,9 @@ template <typename T, uint32_t BitWidth>
 TypeT<T> Executor::runLoadOp(Runtime::StackManager &StackMgr,
                              Runtime::Instance::MemoryInstance &MemInst,
                              const AST::Instruction &Instr) {
+  printf("[DEBUG] Before runLoadOp StackMgr.debug()\n");
+  StackMgr.debug();
+
   // Calculate EA
   ValVariant &Val = StackMgr.getTop();
   if (Val.get<uint32_t>() >
@@ -26,7 +29,8 @@ TypeT<T> Executor::runLoadOp(Runtime::StackManager &StackMgr,
     return Unexpect(ErrCode::Value::MemoryOutOfBounds);
   }
   uint32_t EA = Val.get<uint32_t>() + Instr.getMemoryOffset();
-
+  printf("[DEBUG] Executor::runLoadOp: EA=%d, Val=%d, offset=%d\n", EA, Val.get<uint32_t>(), Instr.getMemoryOffset());
+    
   // Value = Mem.Data[EA : N / 8]
   if (auto Res = MemInst.loadValue<T, BitWidth / 8>(Val.emplace<T>(), EA);
       !Res) {
@@ -34,6 +38,8 @@ TypeT<T> Executor::runLoadOp(Runtime::StackManager &StackMgr,
         ErrInfo::InfoInstruction(Instr.getOpCode(), Instr.getOffset()));
     return Unexpect(Res);
   }
+  printf("[DEBUG] After runLoadOp StackMgr.debug()\n");
+  StackMgr.debug();
   return {};
 }
 

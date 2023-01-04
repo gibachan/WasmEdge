@@ -138,6 +138,14 @@ public:
     FrameStack.clear();
   }
 
+  void debug() noexcept {
+    printf("[DEBUG] StackManager: ValueStack.size=%zu\n", ValueStack.size());
+    for (int i = ValueStack.size() - 1; i >= 0; i--) {
+      auto value = ValueStack[i];
+    printf("[DEBUG] StackManager: ValueStack[%d]=%d\n", i, value.get<uint32_t>());
+    }
+  }
+
 private:
   /// \name Data of stack manager.
   /// @{
